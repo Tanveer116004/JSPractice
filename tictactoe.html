@@ -1,0 +1,126 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="E:\nodejslearning\jquery-3.3.1.min.js"></script>
+    <script>
+        var currentPlayer = "firstPlayer";
+        var gameOver = false;
+        var stepCount = 0;
+        function isWinner(currentPlayer) {
+            stepCount++;
+            if (
+                ((($('#tablecell00').text() == $('#tablecell01').text()) && ($('#tablecell01').text() == $('#tablecell02').text())) && ($('#tablecell00').text() != "" && $('#tablecell01').text() != "" && $('#tablecell02').text() != "")) ||  //first row check
+                ((($('#tablecell10').text() == $('#tablecell11').text()) && ($('#tablecell11').text() == $('#tablecell12').text())) && ($('#tablecell10').text() != "" && $('#tablecell11').text() != "" && $('#tablecell12').text() != "")) ||  //second row check
+                ((($('#tablecell20').text() == $('#tablecell21').text()) && ($('#tablecell21').text() == $('#tablecell22').text())) && ($('#tablecell20').text() != "" && $('#tablecell21').text() != "" && $('#tablecell22').text() != "")) ||  //third row check
+                ((($('#tablecell00').text() == $('#tablecell10').text()) && ($('#tablecell10').text() == $('#tablecell20').text())) && ($('#tablecell00').text() != "" && $('#tablecell10').text() != "" && $('#tablecell20').text() != "")) ||  //first column check
+                ((($('#tablecell01').text() == $('#tablecell11').text()) && ($('#tablecell11').text() == $('#tablecell21').text())) && ($('#tablecell01').text() != "" && $('#tablecell11').text() != "" && $('#tablecell21').text() != "")) ||  //second column check
+                ((($('#tablecell02').text() == $('#tablecell12').text()) && ($('#tablecell12').text() == $('#tablecell22').text())) && ($('#tablecell02').text() != "" && $('#tablecell12').text() != "" && $('#tablecell22').text() != "")) ||  //third column check
+                ((($('#tablecell00').text() == $('#tablecell11').text()) && ($('#tablecell11').text() == $('#tablecell22').text())) && ($('#tablecell00').text() != "" && $('#tablecell11').text() != "" && $('#tablecell22').text() != "")) ||  //l-to-r diagonal check
+                ((($('#tablecell02').text() == $('#tablecell11').text()) && ($('#tablecell11').text() == $('#tablecell20').text())) && ($('#tablecell02').text() != "" && $('#tablecell11').text() != "" && $('#tablecell20').text() != ""))  //r-to-l diagonal check
+            ) {
+                $('#dvVictory').removeClass('hidden');
+                $('#victoryText').text(currentPlayer + " wins");
+                gameOver = true;
+                //location.reload();
+            }
+            else if (stepCount == 9) {
+                $('#dvVictory').removeClass('hidden');
+                $('#victoryText').text("Tie");
+                gameOver = true;
+            }
+        }
+        function cellClick(e) {
+            if (!gameOver) {
+                if ($("#" + e.id).text() == "") {
+                    if (currentPlayer == "firstPlayer") {
+                        $("#" + e.id).text("X");
+                        isWinner(currentPlayer);
+                        currentPlayer = "secondPlayer";
+                    }
+                    else {
+                        $("#" + e.id).text("O");
+                        isWinner(currentPlayer);
+                        currentPlayer = "firstPlayer"
+                    }
+                }
+                else {
+                    alert("This not a correct move,please select another move");
+                }
+            }
+        }
+        function restartGame() {
+            for (var i = 0; i < 3; i++) {
+                for (var j = 0; j < 3; j++) {
+                    $('#tablecell' + i + j).text('');
+                }
+            }
+            stepCount = 0;
+            $('#dvVictory').addClass('hidden');
+            gameOver = false;
+            currentPlayer = 'firstPlayer';
+        }
+    </script>
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 1px solid white;
+        }
+
+        table td {
+            border: 1px solid white;
+        }
+
+        td {
+            padding: 50px;
+            font-size: 30px;
+            color: white;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <center>
+        <h1><span style="color: red;">Tic</span> <span style="color: blue;">Tac</span> <span
+                style="color: yellow;">Toe</span></h1>
+    </center>
+    <div style="padding-top: 100px;">
+        <center>
+            <table>
+                <tr>
+                    <td id="tablecell00" onclick="cellClick(this)"></td>
+                    <td id="tablecell01" onclick="cellClick(this)"></td>
+                    <td id="tablecell02" onclick="cellClick(this)"></td>
+                </tr>
+                <tr>
+                    <td id="tablecell10" onclick="cellClick(this)"></td>
+                    <td id="tablecell11" onclick="cellClick(this)"></td>
+                    <td id="tablecell12" onclick="cellClick(this)"></td>
+                </tr>
+                <tr>
+                    <td id="tablecell20" onclick="cellClick(this)"></td>
+                    <td id="tablecell21" onclick="cellClick(this)"></td>
+                    <td id="tablecell22" onclick="cellClick(this)"></td>
+                </tr>
+            </table>
+        </center>
+    </div>
+    <center>
+        <div id="dvVictory" class="hidden">
+            <h1 id="victoryText" style="color: white;">Winner is currentPlayer</h1>
+            <button onclick="restartGame()"
+                style="color: black; border: 2px solid red; background-color: white;height: 30px;width: 100px;border-radius: 15px;font-weight: bold;">Restart</button>
+        </div>
+    </center>
+</body>
+
+</html>
